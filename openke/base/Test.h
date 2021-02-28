@@ -3,6 +3,7 @@
 #include "Setting.h"
 #include "Reader.h"
 #include "Corrupt.h"
+#include <stdlib.h>
 
 /*=====================================================================================
 link prediction
@@ -257,17 +258,37 @@ void test_link_prediction(bool type_constrain = false) {
     r3_filter_tot /= testTotal;
     r1_filter_tot /= testTotal;
 
+    FILE * file;
+    file = fopen ("test_result.txt", "w+");
     printf("no type constraint results:\n");
-    
+    fprintf(file, "no type constraint results:\n");
+
     printf("metric:\t\t\t MRR \t\t MR \t\t hit@10 \t hit@3  \t hit@1 \n");
+    fprintf(file, "metric:\t\t\t MRR \t\t MR \t\t hit@10 \t hit@3  \t hit@1 \n");
+
     printf("l(raw):\t\t\t %f \t %f \t %f \t %f \t %f \n", l_reci_rank, l_rank, l_tot, l3_tot, l1_tot);
+    fprintf(file, "l(raw):\t\t\t %f \t %f \t %f \t %f \t %f \n", l_reci_rank, l_rank, l_tot, l3_tot, l1_tot);
+
     printf("r(raw):\t\t\t %f \t %f \t %f \t %f \t %f \n", r_reci_rank, r_rank, r_tot, r3_tot, r1_tot);
+    fprintf(file, "r(raw):\t\t\t %f \t %f \t %f \t %f \t %f \n", r_reci_rank, r_rank, r_tot, r3_tot, r1_tot);
+
     printf("averaged(raw):\t\t %f \t %f \t %f \t %f \t %f \n",
             (l_reci_rank+r_reci_rank)/2, (l_rank+r_rank)/2, (l_tot+r_tot)/2, (l3_tot+r3_tot)/2, (l1_tot+r1_tot)/2);
+    fprintf(file, "averaged(raw):\t\t %f \t %f \t %f \t %f \t %f \n",
+            (l_reci_rank+r_reci_rank)/2, (l_rank+r_rank)/2, (l_tot+r_tot)/2, (l3_tot+r3_tot)/2, (l1_tot+r1_tot)/2);
+
     printf("\n");
+    fprintf(file, "\n");
+
     printf("l(filter):\t\t %f \t %f \t %f \t %f \t %f \n", l_filter_reci_rank, l_filter_rank, l_filter_tot, l3_filter_tot, l1_filter_tot);
+    fprintf(file, "l(filter):\t\t %f \t %f \t %f \t %f \t %f \n", l_filter_reci_rank, l_filter_rank, l_filter_tot, l3_filter_tot, l1_filter_tot);
+
     printf("r(filter):\t\t %f \t %f \t %f \t %f \t %f \n", r_filter_reci_rank, r_filter_rank, r_filter_tot, r3_filter_tot, r1_filter_tot);
+    fprintf(file, "r(filter):\t\t %f \t %f \t %f \t %f \t %f \n", r_filter_reci_rank, r_filter_rank, r_filter_tot, r3_filter_tot, r1_filter_tot);
+
     printf("averaged(filter):\t %f \t %f \t %f \t %f \t %f \n",
+            (l_filter_reci_rank+r_filter_reci_rank)/2, (l_filter_rank+r_filter_rank)/2, (l_filter_tot+r_filter_tot)/2, (l3_filter_tot+r3_filter_tot)/2, (l1_filter_tot+r1_filter_tot)/2);
+    fprintf(file, "averaged(filter):\t %f \t %f \t %f \t %f \t %f \n",
             (l_filter_reci_rank+r_filter_reci_rank)/2, (l_filter_rank+r_filter_rank)/2, (l_filter_tot+r_filter_tot)/2, (l3_filter_tot+r3_filter_tot)/2, (l1_filter_tot+r1_filter_tot)/2);
 
     mrr = (l_filter_reci_rank+r_filter_reci_rank) / 2;
@@ -306,16 +327,34 @@ void test_link_prediction(bool type_constrain = false) {
         r1_filter_tot_constrain /= testTotal;
 
         printf("type constraint results:\n");
+        fprintf(file, "type constraint results:\n");
         
         printf("metric:\t\t\t MRR \t\t MR \t\t hit@10 \t hit@3  \t hit@1 \n");
+        fprintf(file, "metric:\t\t\t MRR \t\t MR \t\t hit@10 \t hit@3  \t hit@1 \n");
+
         printf("l(raw):\t\t\t %f \t %f \t %f \t %f \t %f \n", l_reci_rank_constrain, l_rank_constrain, l_tot_constrain, l3_tot_constrain, l1_tot_constrain);
+        fprintf(file, "l(raw):\t\t\t %f \t %f \t %f \t %f \t %f \n", l_reci_rank_constrain, l_rank_constrain, l_tot_constrain, l3_tot_constrain, l1_tot_constrain);
+
         printf("r(raw):\t\t\t %f \t %f \t %f \t %f \t %f \n", r_reci_rank_constrain, r_rank_constrain, r_tot_constrain, r3_tot_constrain, r1_tot_constrain);
+        fprintf(file, "r(raw):\t\t\t %f \t %f \t %f \t %f \t %f \n", r_reci_rank_constrain, r_rank_constrain, r_tot_constrain, r3_tot_constrain, r1_tot_constrain);
+
         printf("averaged(raw):\t\t %f \t %f \t %f \t %f \t %f \n",
                 (l_reci_rank_constrain+r_reci_rank_constrain)/2, (l_rank_constrain+r_rank_constrain)/2, (l_tot_constrain+r_tot_constrain)/2, (l3_tot_constrain+r3_tot_constrain)/2, (l1_tot_constrain+r1_tot_constrain)/2);
+        fprintf(file, "averaged(raw):\t\t %f \t %f \t %f \t %f \t %f \n",
+                (l_reci_rank_constrain+r_reci_rank_constrain)/2, (l_rank_constrain+r_rank_constrain)/2, (l_tot_constrain+r_tot_constrain)/2, (l3_tot_constrain+r3_tot_constrain)/2, (l1_tot_constrain+r1_tot_constrain)/2);
+
         printf("\n");
+        fprintf(file, "\n");
+
         printf("l(filter):\t\t %f \t %f \t %f \t %f \t %f \n", l_filter_reci_rank_constrain, l_filter_rank_constrain, l_filter_tot_constrain, l3_filter_tot_constrain, l1_filter_tot_constrain);
+        fprintf(file, "l(filter):\t\t %f \t %f \t %f \t %f \t %f \n", l_filter_reci_rank_constrain, l_filter_rank_constrain, l_filter_tot_constrain, l3_filter_tot_constrain, l1_filter_tot_constrain);
+
         printf("r(filter):\t\t %f \t %f \t %f \t %f \t %f \n", r_filter_reci_rank_constrain, r_filter_rank_constrain, r_filter_tot_constrain, r3_filter_tot_constrain, r1_filter_tot_constrain);
+        fprintf(file, "r(filter):\t\t %f \t %f \t %f \t %f \t %f \n", r_filter_reci_rank_constrain, r_filter_rank_constrain, r_filter_tot_constrain, r3_filter_tot_constrain, r1_filter_tot_constrain);
+
         printf("averaged(filter):\t %f \t %f \t %f \t %f \t %f \n",
+                (l_filter_reci_rank_constrain+r_filter_reci_rank_constrain)/2, (l_filter_rank_constrain+r_filter_rank_constrain)/2, (l_filter_tot_constrain+r_filter_tot_constrain)/2, (l3_filter_tot_constrain+r3_filter_tot_constrain)/2, (l1_filter_tot_constrain+r1_filter_tot_constrain)/2);
+        fprintf(file, "averaged(filter):\t %f \t %f \t %f \t %f \t %f \n",
                 (l_filter_reci_rank_constrain+r_filter_reci_rank_constrain)/2, (l_filter_rank_constrain+r_filter_rank_constrain)/2, (l_filter_tot_constrain+r_filter_tot_constrain)/2, (l3_filter_tot_constrain+r3_filter_tot_constrain)/2, (l1_filter_tot_constrain+r1_filter_tot_constrain)/2);
 
         mrrTC = (l_filter_reci_rank_constrain+r_filter_reci_rank_constrain)/2;
@@ -324,6 +363,7 @@ void test_link_prediction(bool type_constrain = false) {
         hit3TC = (l3_filter_tot_constrain+r3_filter_tot_constrain) / 2;
         hit1TC = (l1_filter_tot_constrain+r1_filter_tot_constrain) / 2;
     }
+    fclose(file);
 }
 
 extern "C"
